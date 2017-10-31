@@ -62,6 +62,15 @@ public class RNSinchModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void flashCallWithCountryCode(String applicationKey, String phoneNumber, String custom, Callback callback) {
+        mCallback = callback;
+        Config config = SinchVerification.config().applicationKey(applicationKey).context(mContext).build();
+        VerificationListener listener = new MyVerificationListener();
+        mVerification = SinchVerification.createFlashCallVerification(config, phoneNumber, custom, listener);
+        mVerification.initiate();
+    }
+
+    @ReactMethod
     public void sms(String applicationKey, String phoneNumber, String custom, final Callback callback) {
         mCallback = callback;
         Config config = SinchVerification.config().applicationKey(applicationKey).context(mContext).build();
@@ -69,6 +78,15 @@ public class RNSinchModule extends ReactContextBaseJavaModule {
         String defaultRegion = PhoneNumberUtils.getDefaultCountryIso(mContext);
         String phoneNumberInE164 = PhoneNumberUtils.formatNumberToE164(phoneNumber, defaultRegion);
         mVerification = SinchVerification.createSmsVerification(config, phoneNumberInE164, custom, listener);
+        mVerification.initiate();
+    }
+
+    @ReactMethod
+    public void smsWithCountryCode(String applicationKey, String phoneNumber, String custom, final Callback callback) {
+        mCallback = callback;
+        Config config = SinchVerification.config().applicationKey(applicationKey).context(mContext).build();
+        VerificationListener listener = new MyVerificationListener();
+        mVerification = SinchVerification.createSmsVerification(config, phoneNumber, custom, listener);
         mVerification.initiate();
     }
 

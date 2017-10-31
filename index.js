@@ -19,21 +19,31 @@ if (Platform.OS === 'ios') {
 var applicationKey = null;
 
 module.exports = {
-	
+
 	init: function(appKey) {
 		applicationKey = appKey;
 	},
-	
+
 	sms: function(phoneNumber, custom, callback) {
 		invariant(applicationKey, 'Call init() to setup the Sinch application key.');
         RNSinch.sms(applicationKey, phoneNumber, custom, callback);
 	},
-	
+
+    smsWithCountryCode: function(phoneNumber, custom, callback) {
+        invariant(applicationKey, 'Call init() to setup the Sinch application key.');
+        RNSinch.smsWithCountryCode(applicationKey, phoneNumber, custom, callback);
+    },
+
 	flashCall: function(phoneNumber, custom, callback) {
 		invariant(applicationKey, 'Call init() to setup the Sinch application key.');
         RNSinch.flashCall(applicationKey, phoneNumber, custom, callback);
 	},
-	
+
+    flashCallWithCountryCode: function(phoneNumber, custom, callback) {
+        invariant(applicationKey, 'Call init() to setup the Sinch application key.');
+        RNSinch.flashCallWithCountryCode(applicationKey, phoneNumber, custom, callback);
+    },
+
 	verify: RNSinch.verify,
-	
+
 }

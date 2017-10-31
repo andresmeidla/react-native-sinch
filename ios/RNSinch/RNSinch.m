@@ -24,11 +24,25 @@ RCT_EXPORT_METHOD(sms:(NSString *)applicationKey phoneNumber:(NSString *)phoneNu
     if (!_phoneNumber){
         callback(@[@"Invalid phone number"]);
     }
-    
+
     NSString *phoneNumberInE164 = [SINPhoneNumberUtil() formatNumber:_phoneNumber
                                                               format:SINPhoneNumberFormatE164];
     id<SINVerification> verification = [SINVerification SMSVerificationWithApplicationKey:applicationKey
                                                                               phoneNumber:phoneNumberInE164
+                                                                                   custom:custom];
+    self.verification = verification; // retain the verification instance
+    [verification initiateWithCompletionHandler:^(id<SINInitiationResult> result, NSError *error) {
+        if (result.success) {
+            callback(@[[NSNull null]]);
+        } else {
+            callback(@[error.description]);
+        }
+    }];
+}
+
+RCT_EXPORT_METHOD(smsWithCountryCode:(NSString *)applicationKey phoneNumber:(NSString *)phoneNumber custom:(NSString *)custom callback:(RCTResponseSenderBlock)callback) {
+    id<SINVerification> verification = [SINVerification SMSVerificationWithApplicationKey:applicationKey
+                                                                              phoneNumber:phoneNumber
                                                                                    custom:custom];
     self.verification = verification; // retain the verification instance
     [verification initiateWithCompletionHandler:^(id<SINInitiationResult> result, NSError *error) {
